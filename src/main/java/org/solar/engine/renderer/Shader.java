@@ -101,12 +101,12 @@ public class Shader {
     }
     //Load and create shaders from two separate files
     public void load(String vertexShaderName, String fragmentShaderName) throws RuntimeException, IOException{
-        String shaderCode = Utils.getShaderStringFromFile( ABS_PROJECT_PATH + vertexShaderName );
+        String shaderCode = Utils.getStringFromFile( ABS_PROJECT_PATH + vertexShaderName );
         Utils.LOG_INFO("vertex shader:\n" + shaderCode);
         createVertexShader(shaderCode);
         generateUniforms(shaderCode);
 
-        shaderCode = Utils.getShaderStringFromFile( ABS_PROJECT_PATH + fragmentShaderName);
+        shaderCode = Utils.getStringFromFile( ABS_PROJECT_PATH + fragmentShaderName);
         Utils.LOG_INFO("fragment shader:\n" + shaderCode);
         createFragmentShader(shaderCode);
 

@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public class App {
 
-	private Engine m_engine;
 	private ApplicationTemplate m_application;
 
 	public App(ApplicationTemplate appToRun) {
@@ -22,9 +21,7 @@ public class App {
 
 	public void run() throws IOException {
 		Utils.LOG_SUCCESS("Hello LWJGL " + Version.getVersion() + "!");
-
 		Engine m_engine = new Engine();
-
 		m_engine.initialize();
 		m_application.initialise();
 		m_engine.mainLoop(() -> m_application.update());
@@ -33,6 +30,6 @@ public class App {
 	}
 
 	public static void main(String[] args) throws IOException {
-		new App(new testApp()).run();
+		new App( new testApp(args[0]) ).run();
 	}
 }
