@@ -118,7 +118,7 @@ public class Utils {
     public static void      LOG_ERROR    (Object o)         { System.out.println(ANSI_RED + o.toString() + ANSI_RESET); }
     public static void      LOG_WARNING  (Object o)         { System.out.println(ANSI_YELLOW + o.toString() + ANSI_RESET); }
     public static void      LOG_INFO     (Object o)         { System.out.println(ANSI_BLUE + o.toString() + ANSI_RESET); }
-    public static void      LOG          (Object o)         { System.out.println(o.toString()); }
+    public static void      LOG          (Object o)         { System.out.println( o.toString() ); }
     public static float[]   vec3fToArray (Vector3f vec)     { return new float[] {vec.get(0), vec.get(1), vec.get(2)}; }
     private static void     print        (Object o)         { System.out.println(o.toString());}
 }
