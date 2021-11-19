@@ -11,33 +11,32 @@ import org.solar.engine.renderer.VertexData;
 
 /**
  * To load models from .obj files.
- * Important! Tick Triangulate Faces when exporting
+ * Important! Tick Triangulate Faces when exporting OBJ file
  */
 public class ModelLoader {
 
-    public static VertexArray loadModel(String objFileName) {;
-        String objFile = objFileName;
+    public static VertexArray loadModel(String objFileName) {
+
 		String inputObjContent = Utils.getFileAsString(objFileName);
 		float[] vertices = getVertices( inputObjContent ); // non-indexed!
 		int[] verticesIndices = getIndices ( inputObjContent, VERTICES_IDX);
 		float[] texels = getTexels( inputObjContent ); // non-indexed!
 		int[] texelsIndices	= getIndices( inputObjContent, TEXELS_IDX );
-        float[] normals = getNormals( inputObjContent );
+        float[] normals = getNormals( inputObjContent ); // non-indexed!
         int[] normalsIndices = getIndices( inputObjContent, NORMALS_IDX);
-
 		int[] plainIndices = new int[verticesIndices.length];
-		for(int i = 0; i < verticesIndices.length; i++) plainIndices[i] = i;
-		VertexArray result = new VertexArray(plainIndices, new VertexData(new FloatArray(3, vertices, verticesIndices),  new FloatArray(2, texels, texelsIndices), new FloatArray(3, normals, normalsIndices)));
-        return result;
+        for(int i = 0; i < verticesIndices.length; i++) plainIndices[i] = i;
+
+        return  new VertexArray(plainIndices, new VertexData(new FloatArray(3, vertices, verticesIndices),  new FloatArray(2, texels, texelsIndices), new FloatArray(3, normals, normalsIndices)));
     }
 
     private final static String VERTICES_PATTERN = "(v (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)\n)+";
     private final static String INDICES_PATTERN = "(f [0-9]+/([0-9]+)/[0-9]+ ([0-9]+)/[0-9]+/[0-9]+ ([0-9]+)/[0-9]+/[0-9]+\n)+";
     private final static String TEXELS_PATTERN = "(vt (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)\n)+";
     private final static String NORMALS_PATTERN = "(vn (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)\n)+";
-    public final static char VERTICES_IDX = 0;
-    public final static char TEXELS_IDX = 1;
-    public final static char NORMALS_IDX = 2;
+    private final static char VERTICES_IDX = 0;
+    private final static char TEXELS_IDX = 1;
+    private final static char NORMALS_IDX = 2;
 
     private static float[] getVertices(String fileContent){
         Vector<Float> vertices = new Vector<>();
@@ -104,6 +103,5 @@ public class ModelLoader {
         }
         throw new RuntimeException("No indices found at input file!");
     }
-
 
 }
