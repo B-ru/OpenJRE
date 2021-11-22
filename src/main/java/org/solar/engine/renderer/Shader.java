@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.solar.engine.Utils;
 
@@ -72,8 +74,34 @@ public class Shader {
             glUniformMatrix4fv(m_uniforms.get(uniformName), false, m_floatBuffer16);
             m_floatBuffer16.flip();
         } else {
-            Utils.LOG_ERROR("Trying to set value of the uniform that does not exist: " + uniformName);
+            Utils.LOG_ERROR("Trying to set value of the uniform that does not exist 1: " + uniformName);
         }
+    }
+
+    public void setUniform(String uniformName, PointLight pointLight) {
+        setUniform(uniformName + ".colour", pointLight.getColor());
+        setUniform(uniformName + ".position", pointLight.getPosition());
+        setUniform(uniformName + ".intensity", pointLight.getIntensity());
+        PointLight.Attenuation att = pointLight.getAttenuation();
+        setUniform(uniformName + ".att.constant", att.getConstant());
+        setUniform(uniformName + ".att.linear", att.getLinear());
+        setUniform(uniformName + ".att.exponent", att.getExponent());
+    }
+
+    public void setUniform(String uniformName, Material material) {
+        setUniform(uniformName + ".ambient", material.getAmbientColour());
+        setUniform(uniformName + ".diffuse", material.getDiffuseColour());
+        setUniform(uniformName + ".specular", material.getSpecularColour());
+        setUniform(uniformName + ".hasTexture", material.isTextured() ? 1 : 0);
+        setUniform(uniformName + ".reflectance", material.getReflectance());
+    }
+
+    public void setUniform(String uniformName, Vector4f value) {
+        glUniform4f(m_uniforms.get(uniformName), value.x, value.y, value.z, value.w);
+    }
+
+    public void setUniform(String uniformName, Vector3f value) {
+        glUniform3f(m_uniforms.get(uniformName), value.x, value.y, value.z);
     }
 
      /**
@@ -85,8 +113,12 @@ public class Shader {
         if(m_uniforms.containsKey(uniformName)) {
             glUniform1i(m_uniforms.get(uniformName), value);
         } else {
-            Utils.LOG_ERROR("Trying to set value of the uniform that does not exist: " + uniformName);
+            Utils.LOG_ERROR("Trying to set value of the uniform that does not exist 2: " + uniformName);
         }
+    }
+
+    public void setUniform(String uniformName, float value) {
+        glUniform1f(m_uniforms.get(uniformName), value);
     }
 
     private void generateUniforms(String shaderCode) throws RuntimeException {
@@ -118,6 +150,30 @@ public class Shader {
         }
     }
 
+    public void createUniform(String uniformName) throws Exception {
+        int uniformLocation = glGetUniformLocation(m_programId, uniformName);
+        if (uniformLocation < 0) {
+            throw new Exception("Could not find uniform:" + uniformName);
+        }
+        m_uniforms.put(uniformName, uniformLocation);
+    }
+
+    public void createPointLightUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".colour");
+        createUniform(uniformName + ".position");
+        createUniform(uniformName + ".intensity");
+        createUniform(uniformName + ".att.constant");
+        createUniform(uniformName + ".att.linear");
+        createUniform(uniformName + ".att.exponent");
+    }
+
+    public void createMaterialUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".ambient");
+        createUniform(uniformName + ".diffuse");
+        createUniform(uniformName + ".specular");
+        createUniform(uniformName + ".hasTexture");
+        createUniform(uniformName + ".reflectance");
+    }
     /**
      * Loads a shader program from a single file. Vertex shader must beging with #vertexShader 
      * and fragment shader needs to begin with #fragmentShader
@@ -130,8 +186,8 @@ public class Shader {
             createVertexShader(shadersContent[0]);
             createFragmentShader(shadersContent[1]);
             link();
-            generateUniforms(shadersContent[0]);
-            generateUniforms(shadersContent[1]);
+            //generateUniforms(shadersContent[0]);
+            //generateUniforms(shadersContent[1]);
         } catch (Exception e) {
             Utils.LOG_ERROR("Error while loading shaders from path: " + bothShadersFileName + " , " + e.toString());
         }

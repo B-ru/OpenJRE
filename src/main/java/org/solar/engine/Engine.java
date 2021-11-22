@@ -17,7 +17,7 @@ public class Engine {
 	private ImGuiLayer m_guiLayer;
 
 
-    public void initialize() throws IOException {
+    public void initialize() throws Exception {
 
 		//Initialise Event static class
 		Event.initialise();

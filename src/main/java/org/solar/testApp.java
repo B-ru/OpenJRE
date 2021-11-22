@@ -2,10 +2,8 @@ package org.solar;
 
 import org.joml.Vector3f;
 import org.solar.engine.*;
-import org.solar.engine.renderer.Renderer;
-import org.solar.engine.renderer.Shader;
-import org.solar.engine.renderer.Texture;
-import org.solar.engine.renderer.VertexArray;
+import org.solar.engine.renderer.*;
+
 import static org.lwjgl.opengl.GL20.*;
 import static org.solar.engine.ModelLoader.loadModel;
 import imgui.ImGui;
@@ -20,7 +18,7 @@ public class testApp extends ApplicationTemplate {
 	private Texture m_texture;
 
     @Override
-    public void initialise() throws IOException {
+    public void initialise() throws Exception{
         
 		float[] positions = new float[]{
             // V0
@@ -111,8 +109,18 @@ public class testApp extends ApplicationTemplate {
         Renderer.setCameraRefrence(m_camera);
 
 		m_testShader = new Shader("testTextureShader.glsl");
+		m_testShader.createUniform("u_projectionMatrix");
+		m_testShader.createUniform("u_viewMatrix");
+		m_testShader.createUniform("u_worldMatrix");
+		m_testShader.createUniform("texture_sampler");
+		m_testShader.createMaterialUniform("material");
+		m_testShader.createUniform("specularPower");
+		m_testShader.createUniform("ambientLight");
+		m_testShader.createPointLightUniform("pointLight");
+
 		m_testShader.bind();
 		m_testShader.setUniform("u_projectionMatrix", m_camera.getProjectionMatrix());
+		m_testShader.setUniform("texture_sampler", 0);
 		m_testShader.unbind();
 
 		m_testTransform		= new Transform();
@@ -124,10 +132,18 @@ public class testApp extends ApplicationTemplate {
 		});
 
 		//m_testVertexArray = new VertexArray(indices, new FloatArray(3, positions),  new FloatArray(2, textCoords));
-		m_testVertexArray = ModelLoader.loadModel("assets/barn.obj");
+		m_testVertexArray = ModelLoader.loadModel("assets/cube.obj");
 		
-		m_texture = new Texture("assets/block.png", true);
-
+		m_texture = new Texture("assets/cube_texture.png", true);
+		float reflectance = 0.1f;
+		Material material = new Material(m_texture, reflectance);
+		m_testVertexArray.setMaterial(material);
+		m_testShader.bind();
+		m_testShader.setUniform("material", m_testVertexArray.getMaterial());
+		PointLight pointLight = new PointLight(new Vector3f(0.2f,0.2f,0.2f), new Vector3f(-2,0,1), 0.1f);
+		//m_testShader.setUniform("ambientLight", new Vector3f(0.3f,0.3f,0.3f));
+		m_testShader.setUniform("pointLight", pointLight);
+		m_testShader.unbind();
 
 	}
 
@@ -138,7 +154,7 @@ public class testApp extends ApplicationTemplate {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // we're not using the stencil buffer now
 
 		m_testShader.bind();
-		m_testShader.setUniform("u_texture_sampler", 0);
+		m_testShader.setUniform("texture_sampler", 0);
 
 		// Activate first texture unit
 		m_texture.bind();
@@ -152,6 +168,11 @@ public class testApp extends ApplicationTemplate {
         ImGui.text("FPS: " +  (int)(10f/Utils.getDeltaTime()));
         m_testTransform.debugGui("test Transform");
     }
+
+	@Override
+	public void render() {
+
+	}
 
     @Override
     public void terminate() {

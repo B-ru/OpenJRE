@@ -52,11 +52,11 @@ public class FrameBuffer {
         glActiveTexture(GL_TEXTURE0);
     }
 
-    public FrameBuffer() throws IOException {
+    public FrameBuffer() throws Exception {
         load();
 
         m_shader = new Shader("frameBufferShader.glsl");
-
+        m_shader.createUniform("texture_sampler");
         Event.addWindowResizeCallback((widht, height) -> {
             glViewport(0, 0, widht, height);
             load();

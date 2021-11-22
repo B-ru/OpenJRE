@@ -16,6 +16,7 @@ public class VertexArray {
     private int m_indexBufferId;
     private List<Integer> m_floatBuffersIds;
     private int m_numberOfAttributes = 0;
+    private Material material = null;
 
     private int m_indexCount = 0;
     public int getIndexCount() {return m_indexCount;}
@@ -133,4 +134,14 @@ public class VertexArray {
             m_initialised = true;
         }
     }
+
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
 }

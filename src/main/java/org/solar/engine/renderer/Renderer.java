@@ -22,7 +22,7 @@ public class Renderer {
 
     public static FrameBuffer getFrameBuffer() {return m_frameBuffer;}
 
-    public static void initialise() throws IOException {
+    public static void initialise() throws Exception {
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS); 
@@ -81,15 +81,16 @@ public class Renderer {
         
         FrameBuffer.getVertexArray().bind();
         FrameBuffer.getShader().bind();
-        FrameBuffer.getShader().setUniform("u_texture_sampler", 0);
+        FrameBuffer.getShader().setUniform("texture_sampler", 0);
+        //FrameBuffer.getShader().unbind();
         m_frameBuffer.bindTexture();
 
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glDrawElements(GL_TRIANGLES,  FrameBuffer.getVertexArray().getIndexCount(), GL_UNSIGNED_INT, 0);
-        FrameBuffer.getShader().unbind();
-        FrameBuffer.getVertexArray().unbind(); 
-
+        //FrameBuffer.getShader().unbind();
+        //FrameBuffer.getVertexArray().unbind();
+        m_frameBuffer.unbind();
     }
 
 }

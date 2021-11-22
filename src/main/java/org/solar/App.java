@@ -18,7 +18,7 @@ public class App {
 		m_application = appToRun;
 	}
 
-	public void run() throws IOException{
+	public void run() throws Exception{
 		Utils.LOG_SUCCESS("Hello LWJGL " + Version.getVersion() + "!");
 		Engine m_engine = new Engine();
 		m_engine.initialize();
@@ -28,7 +28,7 @@ public class App {
 		m_engine.terminate();
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		new App( new testApp() ).run();
 	}
 
