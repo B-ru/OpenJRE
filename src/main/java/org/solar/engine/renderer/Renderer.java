@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL;
 import org.solar.engine.Camera;
 import org.solar.engine.Utils;
 
+import javax.rmi.CORBA.Util;
 import java.io.IOException;
 
 public class Renderer {
@@ -27,6 +28,9 @@ public class Renderer {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS); 
         Utils.LOG_INFO("OpenGL version: " + glGetString(GL_VERSION));
+        Utils.LOG_INFO("OpenGL Max Texture Size : " + glGetInteger(GL_MAX_TEXTURE_SIZE));
+        Utils.LOG_INFO("OpenGL Vendor : " + glGetString(GL_VENDOR));
+        Utils.LOG_INFO("OpenGL Renderer : " + glGetString(GL_RENDERER));
         m_frameBuffer = new FrameBuffer();
     }   
 
@@ -40,7 +44,7 @@ public class Renderer {
         
         shader.bind();
 
-        shader.setUniform("u_viewMatrix", m_CameraRefrence.getViewMatrix());
+        //shader.setUniform("u_viewMatrix", m_CameraRefrence.getViewMatrix());
 
         vao.bind();
 
@@ -60,8 +64,8 @@ public class Renderer {
         
         shader.bind();
 
-        shader.setUniform(Shader.uniformViewMatrixToken, m_CameraRefrence.getViewMatrix());
-        shader.setUniform(Shader.uniformTransformMatrixToken, transform.getTransformMatrix());
+        //shader.setUniform(Shader.uniformViewMatrixToken, m_CameraRefrence.getViewMatrix());
+        //shader.setUniform(Shader.uniformTransformMatrixToken, transform.getTransformMatrix());
 
         vao.bind();
 

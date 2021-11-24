@@ -6,7 +6,7 @@ public class Camera {
     
     private static final float m_FOV = (float) Math.toRadians(60.0f);
     private static final float m_Z_NEAR = 0.01f;
-    private static final float m_Z_FAR = 1000.f;
+    private static final float m_Z_FAR = 100.f;
     private Matrix4f m_projectionMatrix;
     private Matrix4f m_transformMatrix;
 

@@ -7,8 +7,9 @@ layout (location=1) in vec2 inTexCoords;
 layout (location=2) in vec3 normals;
 
 uniform mat4 u_projectionMatrix;
-uniform mat4 u_viewMatrix;
-uniform mat4 u_worldMatrix;
+uniform mat4 u_modelviewmatrix;
+//uniform mat4 u_viewMatrix;
+//uniform mat4 u_worldMatrix;
 
 out vec2 TexCoords;
 out vec3 vertexNormals;
@@ -16,10 +17,10 @@ out vec3 vertexPos;
 
 void main()
 {
-    vec4 pos = u_viewMatrix * u_worldMatrix * vec4(position, 1.0);
+    vec4 pos = u_modelviewmatrix * vec4(position, 1.0);
     gl_Position =  u_projectionMatrix * pos;
     TexCoords = inTexCoords;
-    vertexNormals = normalize( u_viewMatrix * vec4(normals, 0.0)).xyz;
+    vertexNormals = normalize( u_modelviewmatrix * vec4(normals, 0.0)).xyz;
     vertexPos = pos.xyz;
 }
 
@@ -118,5 +119,6 @@ void main()
 
     vec4 diffuseSpecularComp = calcPointLight(pointLight, vertexPos, vertexNormal);
 
-    fragColor = ambientC * vec4(ambientLight, 1) + diffuseSpecularComp;
+    fragColor = ambientC * vec4(ambientLight, 1) +  diffuseSpecularComp;
+
 }

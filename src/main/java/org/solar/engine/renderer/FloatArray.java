@@ -3,6 +3,7 @@ package org.solar.engine.renderer;
 import org.solar.engine.Utils;
 
 public class FloatArray {
+    public String name = "";
     public int step;
     public int varstep;
     public float[] data;
@@ -12,7 +13,8 @@ public class FloatArray {
         data = inData;
     }
 
-    public FloatArray(int intStep, float[] inData, int[] indices) {
+    public FloatArray(String name, int intStep, float[] inData, int[] indices) {
+        this.name = name;
         step = intStep;
         varstep = 0;
         float[] indexedData = new float[indices.length * step];

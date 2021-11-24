@@ -24,8 +24,8 @@ public class Shader {
     private FloatBuffer m_floatBuffer16; //FloatBuffer for loading matrices
 
     public static final String uniformProjectionMatrixToken = "u_projectionMatrix"; 
-    public static final String uniformViewMatrixToken = "u_viewMatrix"; 
-    public static final String uniformTransformMatrixToken = "u_worldMatrix"; 
+    //public static final String uniformViewMatrixToken = "u_viewMatrix";
+    //public static final String uniformTransformMatrixToken = "u_worldMatrix";
 
     public Shader() {
         m_uniforms = new HashMap<>();
@@ -262,7 +262,7 @@ public class Shader {
         }
     }
     
-    public final static String SHADERS_FOLDER_PATH = "src/main/resources/shaders/";
+    public final static String SHADERS_FOLDER_PATH = "src/main/resources/shaders/"; // for jar-builds use: "shaders/"
     public final static int VERTEX_SHADER_IDX = 0;
     public final static int FRAGMENT_SHADER_IDX = 1;
     private final static String VERTEX_SHADER_TOKEN = "#vertexShader";
@@ -272,7 +272,7 @@ public class Shader {
     private static String[] multipleShadersFromFile(String shaderName) throws IOException{
         String vertexShaderContent = "";
         String fragmentShaderContent = "";
-        String path = SHADERS_FOLDER_PATH + shaderName;
+        String path = SHADERS_FOLDER_PATH + /*"shaders/"*/ shaderName;
         List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
 
         boolean foundVertexShader = false;

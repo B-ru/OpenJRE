@@ -10,6 +10,8 @@ public class Transform {
     private float[] m_rotation = new float[] {0,0,0};
     private float[] m_scale = new float[] {1,1,1};
     private Matrix4f m_transformMatrix = new Matrix4f().identity();
+    private final Matrix4f m_modelViewMatrix = new Matrix4f().identity();
+    private final Matrix4f m_viewMatrix = new Matrix4f().identity();
 
     public Vector3f getPosition() {return new Vector3f(m_position);}
     public Vector3f getRotation() {return new Vector3f(m_rotation);}
@@ -51,4 +53,20 @@ public class Transform {
     }
 
     public Matrix4f getTransformMatrix() {return m_transformMatrix;}
+
+    public Matrix4f getModelViewMatrix(Model model, Matrix4f viewMatrix) {
+        Vector3f rotation = model.getRotation();
+        m_modelViewMatrix.identity().translate(model.getPosition()).
+                rotateX((float)Math.toRadians(-rotation.x)).
+                rotateY((float)Math.toRadians(-rotation.y)).
+                rotateZ((float)Math.toRadians(-rotation.z)).
+                scale(model.getScale());
+        Matrix4f viewCurr = new Matrix4f(viewMatrix);
+        return viewCurr.mul(m_modelViewMatrix);
+    }
+
+
+    public Matrix4f getM_viewMatrix() {
+        return m_viewMatrix;
+    }
 }

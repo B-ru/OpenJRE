@@ -27,7 +27,7 @@ public class ModelLoader {
 		int[] plainIndices = new int[verticesIndices.length];
         for(int i = 0; i < verticesIndices.length; i++) plainIndices[i] = i;
 
-        return  new VertexArray(plainIndices, new VertexData(new FloatArray(3, vertices, verticesIndices),  new FloatArray(2, texels, texelsIndices), new FloatArray(3, normals, normalsIndices)));
+        return  new VertexArray(plainIndices, new VertexData(new FloatArray("vertices", 3, vertices, verticesIndices),  new FloatArray("texels", 2, texels, texelsIndices), new FloatArray("normals", 3, normals, normalsIndices)));
     }
 
     private final static String VERTICES_PATTERN = "(v (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)\n)+";
